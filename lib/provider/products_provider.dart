@@ -35,6 +35,14 @@ class Products with ChangeNotifier {
       imageUrl:
           'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
     ),
+    Product(
+        id: 'p5',
+        title: 'Infinix Note 11',
+        description:
+            'Infinix Note 11 Android smartphone. Announced Nov 2021. Features 6.7″ display, MediaTek Helio G88 chipset, 5000 mAh battery, 128 GB storage, 6 GB RAM.',
+        price: 157.0,
+        imageUrl:
+            "https://images.priceoye.pk/infinix-note-11-pakistan-priceoye-xzadp.jpg"),
   ];
 
   List<Product> get items {
