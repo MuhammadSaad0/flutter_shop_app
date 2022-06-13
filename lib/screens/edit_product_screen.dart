@@ -19,6 +19,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   var _editedProduct =
       Product(id: null, title: "", price: 0, description: "", imageUrl: "");
 
+  var _isInit = true;
   @override
   Widget build(BuildContext context) {
     void dispose() {
@@ -27,10 +28,25 @@ class _EditProductScreenState extends State<EditProductScreen> {
       super.dispose();
     }
 
+    if (_isInit) {
+      final productId = ModalRoute.of(context).settings.arguments as String;
+      if (productId != null) {
+        _editedProduct =
+            Provider.of<Products>(context, listen: false).findById(productId);
+      }
+    }
+    _isInit = false;
+
     void _saveForm() {
       _form.currentState.validate();
       _form.currentState.save();
-      Provider.of<Products>(context, listen: false).addProduct(_editedProduct);
+      if (_editedProduct.id == null) {
+        Provider.of<Products>(context, listen: false)
+            .addProduct(_editedProduct);
+      } else {
+        Provider.of<Products>(context, listen: false)
+            .updateProduct(_editedProduct.id, _editedProduct);
+      }
       Navigator.of(context).pop();
     }
 
@@ -49,6 +65,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
           child: SingleChildScrollView(
             child: Column(children: [
               TextFormField(
+                initialValue: "${_editedProduct.title}",
                 decoration: InputDecoration(labelText: "Title"),
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) {
@@ -65,6 +82,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 },
               ),
               TextFormField(
+                initialValue: "${_editedProduct.price}",
                 decoration: InputDecoration(labelText: "Price"),
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.number,
@@ -88,6 +106,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 },
               ),
               TextFormField(
+                initialValue: "${_editedProduct.description}",
                 decoration: InputDecoration(
                   labelText: "Description",
                 ),
@@ -111,10 +130,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextFormField(
+                    initialValue: "${_editedProduct.imageUrl}",
                     decoration: InputDecoration(labelText: "Image URL"),
                     keyboardType: TextInputType.url,
                     textInputAction: TextInputAction.done,
-                    onChanged: (input) {
+                    onFieldSubmitted: (input) {
                       setState(() {
                         _imageUrlInput = input;
                       });
