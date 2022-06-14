@@ -21,11 +21,16 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var _showOnlyFavourites = false;
   var _isLoading = false;
   void initState() {
+    super.initState();
+    fetchFunction();
+  }
+
+  void fetchFunction() async {
     setState(() {
       _isLoading = true;
     });
 
-    Future.delayed(Duration.zero).then((_) {
+    await Future.delayed(Duration.zero).then((_) {
       Provider.of<Products>(context, listen: false)
           .fetchAndSetProducts()
           .then((_) {
@@ -34,7 +39,6 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         });
       });
     });
-    super.initState();
   }
 
   @override
