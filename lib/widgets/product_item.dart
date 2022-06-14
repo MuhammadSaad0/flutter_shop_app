@@ -21,6 +21,14 @@ class ProductItem extends StatelessWidget {
                   : Icons.favorite_border_outlined),
               onPressed: () {
                 product.toggleFavouriteStatus();
+                ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text("Item added to favourites!"),
+                  duration: Duration(seconds: 2),
+                  action: SnackBarAction(
+                      label: "UNDO",
+                      onPressed: () => product.toggleFavouriteStatus()),
+                ));
               },
             ),
           ),
