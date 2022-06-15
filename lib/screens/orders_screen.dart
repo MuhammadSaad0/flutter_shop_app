@@ -4,9 +4,21 @@ import 'package:provider/provider.dart';
 import '../widgets/order_item.dart' as orderitem;
 import "../widgets/app_drawer.dart";
 
-class OrdersScreen extends StatelessWidget {
+class OrdersScreen extends StatefulWidget {
   const OrdersScreen({Key key}) : super(key: key);
   static const routeName = "/orders";
+
+  @override
+  State<OrdersScreen> createState() => _OrdersScreenState();
+}
+
+class _OrdersScreenState extends State<OrdersScreen> {
+  void initState() {
+    Future.delayed(Duration.zero).then((_) {
+      Provider.of<Orders>(context, listen: false).FetchAndSetOrders();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +29,29 @@ class OrdersScreen extends StatelessWidget {
         title: Text("Your Orders"),
         backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: ListView.builder(
-        itemCount: orderData.orders.length,
-        itemBuilder: (ctx, index) =>
-            orderitem.OrderItem(orderData.orders[index]),
+      body: RefreshIndicator(
+        onRefresh: () =>
+            Provider.of<Orders>(context, listen: false).FetchAndSetOrders(),
+        child: orderData.orders.isEmpty
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: Image.network(
+                        "https://www.no-fea.com/front/images/empty-cart.png"),
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacementNamed("/");
+                      },
+                      child: Text("Shop Now!"))
+                ],
+              )
+            : ListView.builder(
+                itemCount: orderData.orders.length,
+                itemBuilder: (ctx, index) =>
+                    orderitem.OrderItem(orderData.orders[index]),
+              ),
       ),
     );
   }

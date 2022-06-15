@@ -27,6 +27,7 @@ dependencies:
   intl: ^0.17.0
   http: ^0.13.4
   percent_indicator: ^4.0.1
+  fade_out_particle: ^1.0.0
 
 
 

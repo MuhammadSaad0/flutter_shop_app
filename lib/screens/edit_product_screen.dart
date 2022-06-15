@@ -40,16 +40,20 @@ class _EditProductScreenState extends State<EditProductScreen> {
     _isInit = false;
 
     Future<void> _saveForm() async {
-      _form.currentState.validate();
+      // _form.currentState.validate();
       _form.currentState.save();
-      setState(() {
-        _isLoading = true;
-      });
-      if (_editedProduct.id == null) {
+
+      if (_editedProduct.id == null && _form.currentState.validate()) {
         try {
+          setState(() {
+            _isLoading = true;
+          });
           await Provider.of<Products>(context, listen: false)
               .addProduct(_editedProduct);
         } catch (error) {
+          setState(() {
+            _isLoading = false;
+          });
           await showDialog<Null>(
               context: context,
               builder: (ctx) => AlertDialog(
@@ -65,17 +69,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     ],
                   ));
         } finally {
-          setState(() {
-            _isLoading = false;
-          });
           Navigator.of(context).pop();
         }
-      } else {
+      } else if (_form.currentState.validate()) {
+        _isLoading = true;
         await Provider.of<Products>(context, listen: false)
             .updateProduct(_editedProduct.id, _editedProduct);
-        setState(() {
-          _isLoading = false;
-        });
+
         Navigator.of(context).pop();
       }
     }

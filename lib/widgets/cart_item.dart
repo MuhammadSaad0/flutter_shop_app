@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/cart.dart';
 
-class CartItem extends StatelessWidget {
+class CartItem extends StatefulWidget {
   final String id;
   final double price;
   final int quantity;
@@ -12,7 +12,13 @@ class CartItem extends StatelessWidget {
   CartItem(this.id, this.price, this.quantity, this.title, this.productId);
 
   @override
+  State<CartItem> createState() => _CartItemState();
+}
+
+class _CartItemState extends State<CartItem> {
+  @override
   Widget build(BuildContext context) {
+    var total = widget.price * widget.quantity;
     return Dismissible(
       confirmDismiss: (direction) {
         return showDialog(
@@ -41,10 +47,10 @@ class CartItem extends StatelessWidget {
                 ));
       },
       onDismissed: (direction) {
-        Provider.of<Cart>(context, listen: false).removeItem(productId);
+        Provider.of<Cart>(context, listen: false).removeItem(widget.productId);
       },
       direction: DismissDirection.endToStart,
-      key: ValueKey(id),
+      key: ValueKey(widget.id),
       background: Container(
         color: Theme.of(context).errorColor,
         child: Icon(
@@ -66,15 +72,28 @@ class CartItem extends StatelessWidget {
                 padding: EdgeInsets.all(2),
                 child: FittedBox(
                   child: Text(
-                    "\$${price}",
+                    "\$${widget.price}",
                     style: TextStyle(fontSize: 14),
                   ),
                 ),
               ),
             ),
-            title: Text(title),
-            subtitle: Text("Total: \$${price * quantity}"),
-            trailing: Text("${quantity}x"),
+            title: Text(widget.title),
+            subtitle: Text("Total: \$${total.toStringAsFixed(2)}"),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                    onPressed: () => Provider.of<Cart>(context, listen: false)
+                        .removeSingleItem(widget.productId),
+                    icon: Icon(Icons.remove)),
+                Text("${widget.quantity}x"),
+                IconButton(
+                    onPressed: () => Provider.of<Cart>(context, listen: false)
+                        .addSingleItem(widget.productId),
+                    icon: Icon(Icons.add)),
+              ],
+            ),
           ),
         ),
       ),

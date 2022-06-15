@@ -46,39 +46,7 @@ class CartScreen extends StatelessWidget {
                     SizedBox(
                       width: 10,
                     ),
-                    TextButton(
-                      onPressed: () {
-                        if (cart.items.length != 0) {
-                          Provider.of<Orders>(context, listen: false).addOrder(
-                              cart.items.values.toList(), cart.totalAmount);
-                          cart.clear();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Order fullfilled!")));
-                        } else {
-                          showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                    title: Text("Something went wrong"),
-                                    content: Text("Cart is Empty!"),
-                                    actions: [
-                                      TextButton(
-                                        child: Text("Okay"),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      )
-                                    ],
-                                  ));
-                        }
-                      },
-                      child: Text(
-                        "Order now",
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16),
-                      ),
-                    )
+                    OrderButton(cart: cart)
                   ]),
             ),
           ),
@@ -97,6 +65,69 @@ class CartScreen extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+class OrderButton extends StatefulWidget {
+  const OrderButton({
+    Key key,
+    @required this.cart,
+  }) : super(key: key);
+
+  final Cart cart;
+
+  @override
+  State<OrderButton> createState() => _OrderButtonState();
+}
+
+class _OrderButtonState extends State<OrderButton> {
+  var _isLoading = false;
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () async {
+        setState(() {
+          _isLoading = true;
+        });
+        if (widget.cart.items.length != 0) {
+          await Provider.of<Orders>(context, listen: false).addOrder(
+              widget.cart.items.values.toList(), widget.cart.totalAmount);
+          widget.cart.clear();
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("Order fullfilled!")));
+          setState(() {
+            _isLoading = false;
+          });
+        } else {
+          setState(() {
+            _isLoading = false;
+          });
+          showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                    title: Text("Something went wrong"),
+                    content: Text("Cart is Empty!"),
+                    actions: [
+                      TextButton(
+                        child: Text("Okay"),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      )
+                    ],
+                  ));
+        }
+      },
+      child: _isLoading
+          ? CircularProgressIndicator()
+          : Text(
+              "Order now",
+              style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16),
+            ),
     );
   }
 }
