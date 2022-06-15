@@ -19,16 +19,24 @@ class ProductItem extends StatelessWidget {
               icon: Icon(product.isFavourite
                   ? Icons.favorite
                   : Icons.favorite_border_outlined),
-              onPressed: () {
-                product.toggleFavouriteStatus();
-                ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("Item added to favourites!"),
-                  duration: Duration(seconds: 2),
-                  action: SnackBarAction(
-                      label: "UNDO",
-                      onPressed: () => product.toggleFavouriteStatus()),
-                ));
+              onPressed: () async {
+                try {
+                  await product.toggleFavouriteStatus();
+                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Favourite Status was changed!"),
+                    duration: Duration(seconds: 2),
+                    action: SnackBarAction(
+                        label: "UNDO",
+                        onPressed: () => product.toggleFavouriteStatus()),
+                  ));
+                } catch (error) {
+                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Favourite Status was not changed!"),
+                    duration: Duration(seconds: 2),
+                  ));
+                }
               },
             ),
           ),

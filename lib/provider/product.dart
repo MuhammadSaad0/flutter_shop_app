@@ -1,4 +1,7 @@
 import "package:flutter/foundation.dart";
+import 'package:flutter_complete_guide/models/http_exception.dart';
+import "package:http/http.dart" as http;
+import 'dart:convert';
 
 class Product with ChangeNotifier {
   final String id;
@@ -16,9 +19,27 @@ class Product with ChangeNotifier {
       @required this.imageUrl,
       this.isFavourite = false});
 
-  void toggleFavouriteStatus() {
+  Future<void> toggleFavouriteStatus() async {
+    final oldStatus = isFavourite;
     isFavourite = !isFavourite;
     notifyListeners();
+    final url = Uri.parse(
+        "https://flutter-shop-app-46124-default-rtdb.asia-southeast1.firebasedatabase.app/products/$id.json");
+    try {
+      final response = await http.patch(url,
+          body: json.encode({
+            "isFavourite": isFavourite,
+          }));
+      if (response.statusCode >= 400) {
+        isFavourite = oldStatus;
+        notifyListeners();
+        throw HttpException("Item could not be added to favourites");
+      }
+    } catch (error) {
+      isFavourite = oldStatus;
+      notifyListeners();
+      throw error;
+    }
   }
 
   Product copyWith({
