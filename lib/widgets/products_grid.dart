@@ -13,8 +13,8 @@ class ProductsGrid extends StatelessWidget {
         _showOnlyFavourites ? productsDate.favItems : productsDate.items;
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 2 / 3,
+          crossAxisCount: 1,
+          childAspectRatio: 3 / 3,
           crossAxisSpacing: 10,
           mainAxisSpacing: 10),
       padding: const EdgeInsets.all(10),

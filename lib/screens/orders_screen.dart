@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import '../provider/orders.dart' show Orders;
 import 'package:provider/provider.dart';
@@ -37,9 +38,12 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Center(
-                    child: Image.network(
-                        "https://www.no-fea.com/front/images/empty-cart.png"),
-                  ),
+                      child: CachedNetworkImage(
+                    imageUrl:
+                        "https://www.no-fea.com/front/images/empty-cart.png",
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  )),
                   TextButton(
                       onPressed: () {
                         Navigator.of(context).pushReplacementNamed("/");
