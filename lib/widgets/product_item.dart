@@ -3,12 +3,14 @@ import '../screens/product_details_screen.dart';
 import 'package:provider/provider.dart';
 import '../provider/product.dart';
 import '../provider/cart.dart';
+import '../provider/auth.dart';
 
 class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
+    final authData = Provider.of<Auth>(context, listen: false);
     return GridTile(
       footer: ClipRRect(
         borderRadius: BorderRadius.circular(10),
@@ -21,14 +23,16 @@ class ProductItem extends StatelessWidget {
                   : Icons.favorite_border_outlined),
               onPressed: () async {
                 try {
-                  await product.toggleFavouriteStatus();
+                  await product.toggleFavouriteStatus(
+                      authData.token, authData.userId);
                   ScaffoldMessenger.of(context).removeCurrentSnackBar();
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text("Favourite Status was changed!"),
                     duration: Duration(seconds: 2),
                     action: SnackBarAction(
                         label: "UNDO",
-                        onPressed: () => product.toggleFavouriteStatus()),
+                        onPressed: () => product.toggleFavouriteStatus(
+                            authData.token, authData.userId)),
                   ));
                 } catch (error) {
                   ScaffoldMessenger.of(context).removeCurrentSnackBar();
