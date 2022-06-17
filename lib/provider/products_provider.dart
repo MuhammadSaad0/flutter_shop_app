@@ -18,16 +18,19 @@ class Products with ChangeNotifier {
     return _items.where((prodItem) => prodItem.isFavourite).toList();
   }
 
-  Future<void> fetchAndSetProducts() async {
+  Future<void> fetchAndSetProducts({bool filterByUser = false}) async {
+    final filterString =
+        filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : "";
     final url = Uri.parse(
-        "https://flutter-shop-app-46124-default-rtdb.asia-southeast1.firebasedatabase.app/products.json?auth=${_authToken}");
+        'https://flutter-shop-app-46124-default-rtdb.asia-southeast1.firebasedatabase.app/products.json?auth=$_authToken&$filterString');
 
+    print(url);
     try {
       final response = await http.get(url);
+      print(userId);
+      print(response.body);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
-      if (extractedData == null) {
-        _items = [];
-        notifyListeners();
+      if (extractedData == null || extractedData["error"] != null) {
         return;
       }
       final favurl = Uri.parse(
@@ -44,9 +47,10 @@ class Products with ChangeNotifier {
             isFavourite: favData == null ? false : favData[prodId] ?? false,
             imageUrl: prodData['imageUrl']));
       });
-      await setItems(loadedProducts);
+      _items = loadedProducts;
       notifyListeners();
     } catch (error) {
+      print(error);
       throw error;
     }
   }
@@ -66,6 +70,7 @@ class Products with ChangeNotifier {
           "description": product.description,
           "imageUrl": product.imageUrl,
           "price": product.price,
+          "creatorId": userId,
         }),
       );
       final newProduct = Product(
