@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:flutter_complete_guide/splash_screen.dart';
 import 'package:provider/provider.dart';
 import "../provider/cart.dart" show Cart;
 import '../widgets/cart_item.dart';

@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter_complete_guide/models/http_exception.dart';
+import 'package:flutter_complete_guide/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import '../provider/auth.dart';
@@ -236,7 +237,7 @@ class _AuthCardState extends State<AuthCard> {
                   height: 20,
                 ),
                 if (_isLoading)
-                  CircularProgressIndicator()
+                  SplashScreen()
                 else
                   ElevatedButton(
                     child:

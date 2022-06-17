@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/splash_screen.dart';
 import '../widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
 import '../screens/cart_screen.dart';
@@ -90,7 +91,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       drawer: AppDrawer(),
       body: _isLoading
           ? Center(
-              child: CircularProgressIndicator(),
+              child: SplashScreen(),
             )
           : ProductsGrid(_showOnlyFavourites),
     );

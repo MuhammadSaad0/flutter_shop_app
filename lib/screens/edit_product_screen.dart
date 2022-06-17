@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/splash_screen.dart';
 import '../provider/product.dart';
 import "../provider/products_provider.dart";
 import 'package:provider/provider.dart';
@@ -90,7 +91,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       ),
       body: _isLoading
           ? Center(
-              child: CircularProgressIndicator(),
+              child: SplashScreen(),
             )
           : Padding(
               padding: EdgeInsets.all(16),

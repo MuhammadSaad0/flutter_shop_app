@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/splash_screen.dart';
 import '../provider/orders.dart' show Orders;
 import 'package:provider/provider.dart';
 import '../widgets/order_item.dart' as orderitem;

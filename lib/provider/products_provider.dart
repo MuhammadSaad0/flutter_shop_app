@@ -24,11 +24,9 @@ class Products with ChangeNotifier {
     final url = Uri.parse(
         'https://flutter-shop-app-46124-default-rtdb.asia-southeast1.firebasedatabase.app/products.json?auth=$_authToken&$filterString');
 
-    print(url);
     try {
       final response = await http.get(url);
-      print(userId);
-      print(response.body);
+
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       if (extractedData == null || extractedData["error"] != null) {
         return;
@@ -50,7 +48,6 @@ class Products with ChangeNotifier {
       _items = loadedProducts;
       notifyListeners();
     } catch (error) {
-      print(error);
       throw error;
     }
   }
@@ -117,6 +114,7 @@ class Products with ChangeNotifier {
     } catch (error) {
       _items.insert(existingProductIndex, existingProduct);
       notifyListeners();
+
       throw error;
     }
     notifyListeners();

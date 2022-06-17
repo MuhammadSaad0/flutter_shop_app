@@ -16,12 +16,14 @@ class _OrderItemState extends State<OrderItem> {
 
   @override
   Widget build(BuildContext context) {
+    var ordAmount = widget.order.amount;
+    ordAmount.toStringAsFixed(2);
     return Card(
       margin: EdgeInsets.all(10),
       child: Column(
         children: [
           ListTile(
-            title: Text("\$${widget.order.amount}"),
+            title: Text("\$${ordAmount.toStringAsFixed(2)}"),
             subtitle: Text(DateFormat("dd/MM/yyyy")
                 .add_jm()
                 .format(widget.order.dateTime)),

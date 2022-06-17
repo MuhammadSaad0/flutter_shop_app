@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:flutter_complete_guide/screens/edit_product_screen.dart';
+import 'package:flutter_complete_guide/splash_screen.dart';
 import '../widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
 import '../provider/products_provider.dart';
@@ -36,7 +37,7 @@ class UserProducts extends StatelessWidget {
           builder: (ctx, snapshot) =>
               snapshot.connectionState == ConnectionState.waiting
                   ? Center(
-                      child: CircularProgressIndicator(),
+                      child: SplashScreen(),
                     )
                   : RefreshIndicator(
                       onRefresh: () => _refreshProducts(context),

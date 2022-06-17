@@ -33,6 +33,7 @@ class _UserProductItemState extends State<UserProductItem> {
           IconButton(
               icon: Icon(Icons.delete),
               splashColor: Colors.red,
+              splashRadius: 20,
               onPressed: () async {
                 try {
                   await Provider.of<Products>(context, listen: false)
